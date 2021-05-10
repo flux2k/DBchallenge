@@ -31,23 +31,25 @@ CREATE TABLE CLIENT2556 (
 );
 
 CREATE TABLE EVENT2556 (
-    TourName    NVARCHAR(100) FOREIGN KEY REFERENCES TOUR2556(TourName),
+    TourName    NVARCHAR(100),
     EventMonth  NVARCHAR(3) CHECK (EventMonth='Jan' OR EventMonth='Feb' OR EventMonth='Mar' OR EventMonth='Apr' OR EventMonth='May' OR EventMonth='Jun' OR EventMonth='Jul' OR EventMonth='Aug' OR EventMonth='Sep' OR EventMonth='Oct' OR EventMonth='Nov' OR EventMonth='Dec'),
     EventDay    INT CHECK (EventDay >=1 AND EventDay<=31),
     EventYear   INT CHECK (EventYear BETWEEN 1000 AND 9999),
     EventFee    MONEY NOT NULL CHECK (EventFee>0),
-    PRIMARY KEY (TourName, EventMonth, EventDay, EventYear)
+    PRIMARY KEY (TourName, EventMonth, EventDay, EventYear),
+    FOREIGN KEY (TourName) REFERENCES TOUR2556(TourName)
 );
 
 CREATE TABLE BOOKING2556 (
-    ClientID    INT FOREIGN KEY REFERENCES CLIENT2556(ClientID),
-    TourName    NVARCHAR(100) FOREIGN KEY REFERENCES EVENT2556(TourName),
-    EventMonth  NVARCHAR(3) FOREIGN KEY REFERENCES EVENT2556(EventMonth),
-    EventDay    INT FOREIGN KEY REFERENCES EVENT2556(EventDay),
-    EventYear   INT FOREIGN KEY REFERENCES EVENT2556(EventYear),
+    ClientID    INT,
+    TourName    NVARCHAR(100),
+    EventMonth  NVARCHAR(3),
+    EventDay    INT,
+    EventYear   INT,
     Payment     MONEY CHECK (Payment>0),
     DateBooked  DATE
-    PRIMARY KEY (ClientID, TourName, EventMonth, EventDay, EventYear)
+    PRIMARY KEY (ClientID, TourName, EventMonth, EventDay, EventYear),
+    FOREIGN KEY (TourName, EventMonth, EventDay, EventYear) REFERENCES EVENT2556(TourName, EventMonth, EventDay, EventYear)
 );
 
 INSERT INTO TOUR2556 (TourName, Descrip) VALUES ('North', 'Tour of wineries and outlets of the Bedigo and Castlemaine region')
